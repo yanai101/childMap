@@ -1,3 +1,4 @@
+import { MATH_SHOP_TASKS } from '../content/mathShop';
 import { STORY_HOUSE_TASKS } from '../content/storyHouse';
 import type {
   AssessmentProfile,
@@ -118,7 +119,10 @@ export class StorageService {
       updatedAt: now,
     };
 
-    const initialProgress: TaskProgress[] = STORY_HOUSE_TASKS.map((task) => ({
+    const initialProgress: TaskProgress[] = [
+      ...STORY_HOUSE_TASKS,
+      ...MATH_SHOP_TASKS,
+    ].map((task) => ({
       id: `${profile.id}:${task.id}`,
       profileId: profile.id,
       taskId: task.id,

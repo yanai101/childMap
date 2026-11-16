@@ -10,6 +10,7 @@ import {
   Upload,
   UserPlus,
 } from 'lucide-react';
+import { MATH_SHOP_TASKS } from '../../content/mathShop';
 import { STORY_HOUSE_TASKS } from '../../content/storyHouse';
 import { getStorageStatus, storageService } from '../../db/storageService';
 import { generateAssessmentPdf } from '../../services/pdfExport';
@@ -278,10 +279,16 @@ export const ProfilesScreen: React.FC<ProfilesScreenProps> = ({ onSelectProfile 
               <div className="space-y-3">
                 {profiles.map((profile) => {
                   const progress = progressByProfile[profile.id] ?? [];
-                  const completed = progress.filter((t) => t.status === 'הושלם').length;
+                  const storyIds = new Set<string>(STORY_HOUSE_TASKS.map((t) => t.id));
+                  const mathIds = new Set<string>(MATH_SHOP_TASKS.map((t) => t.id));
+                  const storyCompleted = progress.filter(
+                    (t) => storyIds.has(t.taskId) && t.status === 'הושלם',
+                  ).length;
+                  const mathCompleted = progress.filter(
+                    (t) => mathIds.has(t.taskId) && t.status === 'הושלם',
+                  ).length;
                   const inProgress = progress.filter((t) => t.status === 'בתהליך').length;
                   const skipped = progress.filter((t) => t.status === 'דולג').length;
-                  const total = STORY_HOUSE_TASKS.length;
 
                   return (
                     <div
@@ -302,11 +309,14 @@ export const ProfilesScreen: React.FC<ProfilesScreenProps> = ({ onSelectProfile 
                           <p className="mt-1 text-xs text-stone-500">{profile.notes}</p>
                         )}
                         <div className="mt-2 flex flex-wrap gap-2 text-xs font-semibold">
-                          <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-emerald-800">
-                            הושלמו: {completed}/{total}
+                          <span className="rounded-full bg-amber-100 px-2.5 py-0.5 text-amber-900">
+                            בית הסיפורים: {storyCompleted}/{STORY_HOUSE_TASKS.length}
+                          </span>
+                          <span className="rounded-full bg-sky-100 px-2.5 py-0.5 text-sky-900">
+                            חנות המספרים: {mathCompleted}/{MATH_SHOP_TASKS.length}
                           </span>
                           {inProgress > 0 && (
-                            <span className="rounded-full bg-amber-100 px-2.5 py-0.5 text-amber-800">
+                            <span className="rounded-full bg-orange-100 px-2.5 py-0.5 text-orange-800">
                               בתהליך: {inProgress}
                             </span>
                           )}

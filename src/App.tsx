@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { MathShopHub } from './components/mathShop/MathShopHub';
 import { ProfilesScreen } from './components/profiles/ProfilesScreen';
 import { StoryHouseHub } from './components/storyHouse/StoryHouseHub';
 import { VillageScreen } from './components/village/VillageScreen';
@@ -6,7 +7,7 @@ import { WelcomeScreen } from './components/welcome/WelcomeScreen';
 import { requestPersistentStorage, storageService } from './db/storageService';
 import type { AssessmentProfile, TaskProgress } from './types/domain';
 
-type AppScreen = 'welcome' | 'profiles' | 'village' | 'story-house';
+type AppScreen = 'welcome' | 'profiles' | 'village' | 'story-house' | 'math-shop';
 
 const ACTIVE_PROFILE_KEY = 'childmap_active_profile_id';
 const ACTIVE_SCREEN_KEY = 'childmap_active_screen';
@@ -34,7 +35,11 @@ export function App() {
           if (prof) {
             setActiveProfile(prof);
             await refreshProgress(prof.id);
-            if (savedScreen === 'village' || savedScreen === 'story-house') {
+            if (
+              savedScreen === 'village' ||
+              savedScreen === 'story-house' ||
+              savedScreen === 'math-shop'
+            ) {
               setScreen(savedScreen);
             } else {
               setScreen('village');
@@ -97,10 +102,24 @@ export function App() {
         profile={activeProfile}
         taskProgress={taskProgress}
         onEnterStoryHouse={() => navigate('story-house')}
+        onEnterMathShop={() => navigate('math-shop')}
         onBackToProfiles={() => {
           setActiveProfile(null);
           navigate('profiles', null);
         }}
+      />
+    );
+  }
+
+  if (screen === 'math-shop') {
+    return (
+      <MathShopHub
+        profile={activeProfile}
+        taskProgress={taskProgress}
+        onProgressUpdated={async () => {
+          await refreshProgress(activeProfile.id);
+        }}
+        onBackToVillage={() => navigate('village')}
       />
     );
   }

@@ -30,7 +30,7 @@ describe('StorageService & Backup Restoration', () => {
     expect(profiles).toHaveLength(2);
 
     const progress1 = await service.getTaskProgressForProfile(p1.id);
-    expect(progress1).toHaveLength(8);
+    expect(progress1).toHaveLength(17);
     expect(progress1.every((t) => t.status === 'לא התחיל')).toBe(true);
   });
 

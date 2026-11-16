@@ -7,9 +7,10 @@ import {
   X,
 } from 'lucide-react';
 import { TASK_CRITERIA } from '../../content/criteria';
+import { getMathTaskMetadata } from '../../content/mathShop';
 import { getTaskMetadata } from '../../content/storyHouse';
 import { storageService } from '../../db/storageService';
-import type { TaskId, TaskStatus, TeacherAssessment } from '../../types/domain';
+import type { MathTaskId, StoryTaskId, TaskId, TaskStatus, TeacherAssessment } from '../../types/domain';
 import { AudioRecorderWidget } from './AudioRecorderWidget';
 import { CriteriaEvaluator } from './CriteriaEvaluator';
 import { SkipTaskModal } from './SkipTaskModal';
@@ -25,6 +26,13 @@ interface TeacherDrawerProps {
   extraContent?: React.ReactNode;
 }
 
+function resolveTaskMetadata(taskId: TaskId) {
+  if (taskId.startsWith('math_')) {
+    return getMathTaskMetadata(taskId as MathTaskId);
+  }
+  return getTaskMetadata(taskId as StoryTaskId);
+}
+
 export const TeacherDrawer: React.FC<TeacherDrawerProps> = ({
   open,
   onClose,
@@ -35,7 +43,7 @@ export const TeacherDrawer: React.FC<TeacherDrawerProps> = ({
   onStatusChanged,
   extraContent,
 }) => {
-  const taskMeta = getTaskMetadata(taskId);
+  const taskMeta = resolveTaskMetadata(taskId);
   const criteria = TASK_CRITERIA[taskId] ?? [];
 
   const [assessment, setAssessment] = useState<TeacherAssessment>({

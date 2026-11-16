@@ -245,6 +245,330 @@ export const TASK_CRITERIA: Record<TaskId, AssessmentCriterion[]> = {
       ],
     },
   ],
+  math_oral_counting: [
+    {
+      id: 'sequence_stability',
+      title: 'יציבות רצף המספרים',
+      levels: [
+        { id: 'stable', label: 'רצף יציב ומסודר לאורך הספירה', description: 'סופר ברצף עולה עקבי ללא בלבול בסדר.' },
+        { id: 'mostly_stable', label: 'רצף יציב ברובו עם מעידות קלות', description: 'דילוג או היפוך בודד במספרים גבוהים יותר.' },
+        { id: 'unstable', label: 'רצף לא יציב / קפיצות מרובות', description: 'מתקשה לשמור על סדר המספרים.' },
+      ],
+    },
+    {
+      id: 'accuracy',
+      title: 'דיוק בספירה',
+      levels: [
+        { id: 'accurate', label: 'ספירה מדויקת ללא השמטות או חזרות', description: 'כל המספרים נאמרים במדויק.' },
+        { id: 'minor_errors', label: 'טעויות קלות בספירה', description: 'השמטה או חזרה נקודתית.' },
+        { id: 'frequent_errors', label: 'טעויות תכופות ברצף', description: 'השמטות, חזרות או החלפות רבות.' },
+      ],
+    },
+    {
+      id: 'continuity',
+      title: 'רציפות',
+      levels: [
+        { id: 'fluent', label: 'ספירה רציפה ושוטפת', description: 'סופר בקצב אחיד ללא עצירות ממושכות.' },
+        { id: 'hesitant', label: 'ספירה עם עצירות קלות לחשיבה', description: 'עוצר מדי פעם וממשיך.' },
+        { id: 'fragmented', label: 'ספירה קטועה', description: 'נעצר לעיתים קרובות ומתקשה להמשיך.' },
+      ],
+    },
+    {
+      id: 'independence',
+      title: 'עצמאות וצורך בתיווך',
+      levels: [
+        { id: 'independent', label: 'סופר באופן עצמאי לחלוטין', description: 'מתחיל וממשיך ללא עזרה.' },
+        { id: 'cued', label: 'נעזר בהתחלה או בעידוד קל', description: 'זקוק לפתיחה משותפת ("1, 2...") או עידוד.' },
+        { id: 'high_support', label: 'זקוק לתיווך מתמשך', description: 'נדרשת עזרה חוזרת להמשך הספירה.' },
+      ],
+    },
+  ],
+  math_counting_objects: [
+    {
+      id: 'one_to_one',
+      title: 'התאמה חד-חד ערכית',
+      levels: [
+        { id: 'consistent', label: 'מצביע/מונה כל חפץ פעם אחת בדיוק', description: 'התאמה מדויקת בין מילת המספר לחפץ.' },
+        { id: 'occasional_skip', label: 'סטייה קלה בכמויות הגדולות (7, 9)', description: 'שומר על התאמה ב־4 ו־6 אך מתבלבל קלות ב־7/9.' },
+        { id: 'inconsistent', label: 'קושי בהתאמה חד-חד ערכית', description: 'סופר מהר מדי, מדלג או מונה חפץ פעמיים.' },
+      ],
+    },
+    {
+      id: 'counting_sequence',
+      title: 'רצף מנייה מדויק',
+      levels: [
+        { id: 'accurate', label: 'שומר על רצף מספרים תקין בכל הפריטים', description: 'סופר 1, 2, 3... בדיוק.' },
+        { id: 'partial', label: 'רצף תקין ברוב הפריטים', description: 'טעות רצף קלה באחד הפריטים.' },
+        { id: 'needs_support', label: 'קושי בשמירה על רצף המנייה', description: 'מתבלבל בסדר המספרים תוך כדי מנייה.' },
+      ],
+    },
+    {
+      id: 'cardinality',
+      title: 'הבנת עקרון הקרדינליות (המספר האחרון מייצג את הכמות)',
+      levels: [
+        { id: 'understood', label: 'מציין מיד את המספר האחרון ככמות הכוללת', description: 'אינו נדרש לספור שוב כשנשאל "אז כמה יש?".' },
+        { id: 'emerging', label: 'מבין בחלק מהפריטים / סופר שוב', description: 'לעיתים מונה מחדש במקום לציין את המספר האחרון.' },
+        { id: 'not_yet', label: 'טרם מבין שהמספר האחרון הוא הסך הכולל', description: 'אומר מספר שונה או ממשיך למנות.' },
+      ],
+    },
+    {
+      id: 'independence',
+      title: 'עצמאות וצורך בתיווך',
+      levels: [
+        { id: 'independent', label: 'מונה ומשיב עצמאית', description: 'מתארגן לבד במנייה.' },
+        { id: 'cued', label: 'נעזר בהכוונה לארגון המנייה', description: 'למשל: "בוא נגע בכל תפוח כשסופרים".' },
+        { id: 'high_support', label: 'זקוק לתיווך צמוד', description: 'נדרשת מנייה משותפת.' },
+      ],
+    },
+  ],
+  math_qty_to_numeral: [
+    {
+      id: 'quantity_recognition',
+      title: 'זיהוי והערכת כמות',
+      levels: [
+        { id: 'accurate', label: 'מזהה/מונה כמויות בדיוק בשני השלבים', description: 'דיוק בטווח 1–5 וגם 6–10.' },
+        { id: 'stage_a_only', label: 'דיוק בטווח 1–5, קושי קל ב־6–10', description: 'שולט בכמויות קטנות ומתקשה בגדולות.' },
+        { id: 'developing', label: 'קושי בזיהוי הכמויות', description: 'טעויות במנייה לפני בחירת הספרה.' },
+      ],
+    },
+    {
+      id: 'numeral_selection',
+      title: 'בחירת ספרה מתאימה',
+      levels: [
+        { id: 'accurate', label: 'בוחר את הספרה התואמת בדיוק', description: 'מקשר בין הכמות לסמל הספרה.' },
+        { id: 'partial', label: 'התאמה חלקית', description: 'מתבלבל לעיתים בין ספרות דומות או סמוכות.' },
+        { id: 'incorrect', label: 'קושי בהתאמת הכמות לספרה', description: 'בוחר ספרות שאינן תואמות לכמות.' },
+      ],
+    },
+    {
+      id: 'counting_strategy',
+      title: 'אסטרטגיית מנייה',
+      levels: [
+        { id: 'systematic', label: 'סובטיזציה / מנייה מסודרת מימין לשמאל או בשורות', description: 'אסטרטגיה יעילה ומאורגנת.' },
+        { id: 'touch_counting', label: 'מנייה באצבע על המסך', description: 'מצביע על כל פריט בקצב עקבי.' },
+        { id: 'unsystematic', label: 'ניחוש או מנייה לא מאורגנת', description: 'בוחר מהר ללא מנייה או מתבלבל.' },
+      ],
+    },
+    {
+      id: 'independence',
+      title: 'עצמאות וצורך בתיווך',
+      levels: [
+        { id: 'independent', label: 'ביצוע עצמאי', description: 'פועל לבד ללא רמזים.' },
+        { id: 'cued', label: 'זקוק לתזכורת לספור לפני בחירה', description: 'מצליח לאחר הכוונה קלה.' },
+        { id: 'high_support', label: 'זקוק לתיווך צמוד', description: 'נדרשת עזרה במנייה ובחיפוש הספרה.' },
+      ],
+    },
+  ],
+  math_qty_to_qty: [
+    {
+      id: 'matching_accuracy',
+      title: 'דיוק בהתאמת כמויות',
+      levels: [
+        { id: 'accurate', label: 'מתאים כמויות שוות בדיוק בשני השלבים', description: 'אינו מוטעה מסוג החפץ או הסידור.' },
+        { id: 'stage_a_only', label: 'מתאים היטב ב־1–5, קושי ב־6–10', description: 'דיוק בכמויות קטנות בלבד.' },
+        { id: 'struggling', label: 'קושי בהתאמת כמות לכמות', description: 'נמשך לסידור חזותי או מנחש.' },
+      ],
+    },
+    {
+      id: 'one_to_one_observed',
+      title: 'התאמה חד-חד ערכית (כאשר נצפתה)',
+      levels: [
+        { id: 'observed_accurate', label: 'משתמש במנייה/התאמה מדויקת בין הקבוצות', description: 'מונה את קבוצת היעד ואז בודק את הקבוצות.' },
+        { id: 'partial', label: 'התאמה חלקית', description: 'מונה חלק מהקבוצות.' },
+        { id: 'not_observed', label: 'לא נצפתה אסטרטגיית התאמה', description: 'מנסה להעריך במבט בלבד.' },
+      ],
+    },
+    {
+      id: 'group_comparison',
+      title: 'יכולת השוואה בין קבוצות',
+      levels: [
+        { id: 'systematic', label: 'משווה באופן שיטתי בין הקבוצות', description: 'בודק אפשרויות ומוודא שוויון.' },
+        { id: 'impulsive', label: 'בוחר מהר ולעיתים מתקן', description: 'בודק רק חלק מהאפשרויות.' },
+        { id: 'difficulty', label: 'מתקשה להשוות בין חפצים שונים', description: 'מוטה מגודל או מצבע.' },
+      ],
+    },
+    {
+      id: 'independence',
+      title: 'עצמאות וצורך בתיווך',
+      levels: [
+        { id: 'independent', label: 'עצמאי', description: 'אינו זקוק לתיווך.' },
+        { id: 'cued', label: 'נעזר בהכוונה מילולית קלה', description: 'מצליח לאחר הצעה לספור כל קבוצה.' },
+        { id: 'high_support', label: 'זקוק לתיווך צמוד', description: 'נדרשת עזרה בהשוואה.' },
+      ],
+    },
+  ],
+  math_more_less: [
+    {
+      id: 'concept_more',
+      title: 'הבנת המושג "יותר"',
+      levels: [
+        { id: 'understood', label: 'מזהה במדויק היכן יש יותר', description: 'מבין את המשמעות הכמותית של "יותר".' },
+        { id: 'developing', label: 'מזהה בחלק מהמקרים / בתיווך', description: 'זקוק לחידוד כשסידור החפצים שונה.' },
+        { id: 'unclear', label: 'מתקשה בזיהוי "יותר"', description: 'מבלבל עם גודל פיזי או עם "פחות".' },
+      ],
+    },
+    {
+      id: 'concept_less',
+      title: 'הבנת המושג "פחות"',
+      levels: [
+        { id: 'understood', label: 'מזהה במדויק היכן יש פחות', description: 'מבין את המשמעות הכמותית של "פחות".' },
+        { id: 'developing', label: 'מזהה בתיווך או בפערים גדולים', description: 'זקוק לעידוד לספור.' },
+        { id: 'unclear', label: 'מתקשה בזיהוי "פחות"', description: 'נוטה להצביע על הקבוצה הגדולה גם כשנשאל "פחות".' },
+      ],
+    },
+    {
+      id: 'concept_equal',
+      title: 'הבנת המושג "שווה / אותה כמות"',
+      levels: [
+        { id: 'understood', label: 'מזהה מצבים של שוויון כמותי', description: 'מבחין שאין יותר או פחות אלא אותו דבר.' },
+        { id: 'developing', label: 'מזהה לאחר ספירה משותפת', description: 'מפנים את השוויון עם הכוונה.' },
+        { id: 'unclear', label: 'מתקשה לזהות שוויון', description: 'מחפש תמיד צד אחד שגדול יותר.' },
+      ],
+    },
+    {
+      id: 'relative_magnitude_gt4',
+      title: 'הבנת גודל יחסי ושיום מספרים הגדולים מ־4',
+      levels: [
+        { id: 'rich', label: 'מציין מספרים רבים הגדולים מ־4 בהבנה ברורה', description: 'למשל: 5, 6, 8, 10 ומסביר שהם אחרי 4.' },
+        { id: 'partial', label: 'מציין מספר אחד או שניים הגדולים מ־4', description: 'או משלב מספרים קטנים מ־4.' },
+        { id: 'difficulty', label: 'קושי בהבנת "גדול מ־4"', description: 'אומר מספרים קטנים מ־4 או אינו משיב.' },
+      ],
+    },
+    {
+      id: 'independence',
+      title: 'עצמאות וצורך בתיווך',
+      levels: [
+        { id: 'independent', label: 'עצמאי', description: 'משיב ומשווה בביטחון.' },
+        { id: 'cued', label: 'נעזר בתזכורת לספור', description: 'משיב היטב לאחר מנייה.' },
+        { id: 'high_support', label: 'זקוק לתיווך משמעותי', description: 'נדרשת עזרה בהשוואה ובשאלת ההמשך.' },
+      ],
+    },
+  ],
+  math_numeral_recognition: [
+    {
+      id: 'recognition_accuracy',
+      title: 'זיהוי ספרות 1–10',
+      levels: [
+        { id: 'full', label: 'מזהה את כל או מרבית הספרות 1–10 בדיוק', description: 'כולל המספר הדו-ספרתי 10.' },
+        { id: 'partial', label: 'מזהה חלק מהספרות (לרוב 1–5)', description: 'מתבלבל בספרות גבוהות או דומות (כמו 6 ו־9).' },
+        { id: 'emerging', label: 'זיהוי ראשוני / ספרות בודדות', description: 'מזהה מספר מצומצם של ספרות.' },
+      ],
+    },
+    {
+      id: 'independence',
+      title: 'עצמאות וצורך בתיווך',
+      levels: [
+        { id: 'independent', label: 'מזהה מיד ובאופן עצמאי', description: 'ללא רמזים.' },
+        { id: 'cued', label: 'מזהה לאחר התבוננות חוזרת / רמז', description: 'מתקן את עצמו בעידוד קל.' },
+        { id: 'high_support', label: 'זקוק לתיווך', description: 'נעזר בהדגמה או צמצום אפשרויות.' },
+      ],
+    },
+  ],
+  math_numeral_naming: [
+    {
+      id: 'naming_accuracy',
+      title: 'שיום ספרות 1–10',
+      levels: [
+        { id: 'full', label: 'משיים במדויק את רוב/כל הספרות 1–10', description: 'שליפה ישירה ומדויקת של שם המספר.' },
+        { id: 'partial', label: 'משיים חלק מהספרות / נעזר ברמז', description: 'שולט בחלק מהטווח או מבלבל ספרות דומות.' },
+        { id: 'emerging', label: 'שיום חלקי מאוד / קושי בשליפה', description: 'מכיר ספרות בודדות בלבד.' },
+      ],
+    },
+    {
+      id: 'independence',
+      title: 'עצמאות בשליפה',
+      levels: [
+        { id: 'independent', label: 'שליפה עצמאית ומהירה', description: 'עונה מיד בהצגת הספרה.' },
+        { id: 'cued', label: 'זקוק לזמן או לרמז ("זה אחרי 5...")', description: 'מגיע למספר באמצעות רצף.' },
+        { id: 'high_support', label: 'זקוק לתיווך מלא', description: 'מתקשה לשלוף גם עם רמז.' },
+      ],
+    },
+  ],
+  math_addition: [
+    {
+      id: 'problem_understanding',
+      title: 'הבנת הסיפור והבעיה המילולית',
+      levels: [
+        { id: 'clear', label: 'מבין שמדובר בהוספה / צירוף', description: 'קולט את משמעות השאלה המילולית.' },
+        { id: 'partial', label: 'מבין לאחר חזרה איטית על הסיפור', description: 'זקוק להדגשה של פעולת ההוספה.' },
+        { id: 'unclear', label: 'קושי בהבנת הבעיה המילולית', description: 'אינו מחבר בין חלקי הסיפור.' },
+      ],
+    },
+    {
+      id: 'quantity_identification',
+      title: 'זיהוי הכמויות הרלוונטיות',
+      levels: [
+        { id: 'accurate', label: 'מזהה את שני המספרים בבעיה במדויק', description: 'לוקח/מונה בדיוק את הכמויות שנאמרו.' },
+        { id: 'partial', label: 'זקוק לתזכורת של אחד המספרים', description: 'שוכח חלק מהנתונים.' },
+        { id: 'inaccurate', label: 'קושי בזיהוי הכמויות', description: 'מונה כמות שונה מהנאמר בסיפור.' },
+      ],
+    },
+    {
+      id: 'strategy_and_result',
+      title: 'אסטרטגיית חיבור ותוצאה',
+      levels: [
+        { id: 'effective', label: 'בוחר אסטרטגיה יעילה ומגיע לתוצאה נכונה', description: 'אצבעות, חפצים או חישוב מנטלי מדויק.' },
+        { id: 'developing', label: 'אסטרטגיה מתאימה עם טעות מנייה קלה', description: 'הדרך נכונה אך התוצאה סוטה ב־1.' },
+        { id: 'ineffective', label: 'מתקשה בבחירת אסטרטגיה / ניחוש', description: 'זורק מספר ללא חישוב או מנייה.' },
+      ],
+    },
+    {
+      id: 'explanation',
+      title: 'יכולת להסביר את דרך הפתרון',
+      levels: [
+        { id: 'clear', label: 'מסביר במילים כיצד פתר', description: 'למשל: "היו 2 והוספתי עוד 1 אז יצא 3".' },
+        { id: 'demonstrates', label: 'מדגים באצבעות/חפצים ללא הסבר מילולי מלא', description: 'מראה אך מתקשה לנסח.' },
+        { id: 'none', label: 'אינו מסביר איך הגיע לתשובה', description: 'אומר רק את המספר או "סתם".' },
+      ],
+    },
+    {
+      id: 'independence',
+      title: 'עצמאות וצורך בתיווך',
+      levels: [
+        { id: 'independent', label: 'פותר באופן עצמאי', description: 'ללא הכוונה.' },
+        { id: 'cued', label: 'נעזר בהמחשה או שאלה מנחה', description: 'מצליח עם הצעה להשתמש בחפצים.' },
+        { id: 'high_support', label: 'זקוק לתיווך צמוד', description: 'פותרים יחד שלב אחר שלב.' },
+      ],
+    },
+  ],
+  math_patterns: [
+    {
+      id: 'pattern_recognition',
+      title: 'זיהוי הדגם ויחידת החזרה',
+      levels: [
+        { id: 'all_types', label: 'מזהה דגמי AB, AAB ו־ABC ויחידת חזרה', description: 'קולט את החוקיות גם כשהחסר באמצע.' },
+        { id: 'ab_only', label: 'מזהה AB ומתקשה ב־AAB/ABC', description: 'שולט בדגם פשוט של שניים.' },
+        { id: 'developing', label: 'קושי בזיהוי החוקיות', description: 'בוחר לפי צבע אהוב ולא לפי דגם.' },
+      ],
+    },
+    {
+      id: 'continuation_accuracy',
+      title: 'השלמה נכונה של הדגם',
+      levels: [
+        { id: 'accurate', label: 'משלים נכון בסוף ובאמצע הדגם', description: 'דיוק עקבי בפריטים.' },
+        { id: 'partial', label: 'משלים נכון חלק מהדגמים', description: 'מצליח בסוף הדגם ומתקשה כשהחסר באמצע.' },
+        { id: 'inaccurate', label: 'קושי בהשלמת הדגמים', description: 'טעויות חוזרות.' },
+      ],
+    },
+    {
+      id: 'verbal_explanation',
+      title: 'הסבר מילולי של הדגם',
+      levels: [
+        { id: 'clear', label: 'מסביר את החוקיות במילים', description: 'למשל: "אדום, כחול, אדום, כחול".' },
+        { id: 'partial', label: 'מצביע או מתאר חלקית', description: 'זקוק לשאלה "מה חוזר על עצמו?".' },
+        { id: 'none', label: 'מתקשה להסביר מילולית', description: 'אינו מנסח את החוקיות.' },
+      ],
+    },
+    {
+      id: 'independence',
+      title: 'עצמאות וצורך בתיווך',
+      levels: [
+        { id: 'independent', label: 'עצמאי', description: 'משלים ומזהה לבד.' },
+        { id: 'cued', label: 'נעזר בקריאה קולית של הדגם', description: 'מצליח כשקוראים יחד את הרצף בקול.' },
+        { id: 'high_support', label: 'זקוק לתיווך צמוד', description: 'נדרשת הדגמה מלאה.' },
+      ],
+    },
+  ],
 };
 
 export const ITEM_PERFORMANCE_LEVELS: Record<

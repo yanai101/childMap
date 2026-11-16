@@ -133,3 +133,14 @@ export const ENCOURAGING_MESSAGES = [
 export function getRandomEncouragement(): string {
   return ENCOURAGING_MESSAGES[Math.floor(Math.random() * ENCOURAGING_MESSAGES.length)];
 }
+
+export const MATH_ENCOURAGING_MESSAGES = [
+  'איזה יופי, ממשיכים!',
+  'תודה שעזרת לדובי!',
+  'בוא נראה מה מחכה לנו עכשיו!',
+  'דובי שמח מאוד על העזרה שלך!',
+];
+
+export function getMathEncouragement(): string {
+  return MATH_ENCOURAGING_MESSAGES[Math.floor(Math.random() * MATH_ENCOURAGING_MESSAGES.length)];
+}

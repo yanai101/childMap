@@ -9,6 +9,7 @@ interface VillageScreenProps {
   profile: AssessmentProfile;
   taskProgress: TaskProgress[];
   onEnterStoryHouse: () => void;
+  onEnterMathShop: () => void;
   onBackToProfiles: () => void;
 }
 
@@ -16,14 +17,22 @@ export const VillageScreen: React.FC<VillageScreenProps> = ({
   profile,
   taskProgress,
   onEnterStoryHouse,
+  onEnterMathShop,
   onBackToProfiles,
 }) => {
-  const completedCount = taskProgress.filter((t) => t.status === 'הושלם').length;
-  const totalCount = taskProgress.length || 8;
+  const storyCompleted = taskProgress.filter(
+    (t) => !t.taskId.startsWith('math_') && t.status === 'הושלם',
+  ).length;
+  const mathCompleted = taskProgress.filter(
+    (t) => t.taskId.startsWith('math_') && t.status === 'הושלם',
+  ).length;
 
   const handleSelectBuilding = (building: VillageBuilding) => {
-    if (building.available && building.id === 'story-house') {
+    if (!building.available) return;
+    if (building.id === 'story-house') {
       onEnterStoryHouse();
+    } else if (building.id === 'numbers-shop') {
+      onEnterMathShop();
     }
   };
 
@@ -52,11 +61,15 @@ export const VillageScreen: React.FC<VillageScreenProps> = ({
             </div>
           </div>
 
-          <div className="flex items-center gap-2 rounded-2xl bg-amber-100 px-4 py-2 text-sm font-bold text-amber-900">
-            <Sparkles className="h-4 w-4 text-amber-600" />
-            <span>
-              בית הסיפורים: {completedCount} מתוך {totalCount} משימות הושלמו
-            </span>
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="flex items-center gap-1.5 rounded-2xl bg-amber-100 px-3.5 py-2 text-xs font-bold text-amber-900">
+              <Sparkles className="h-3.5 w-3.5 text-amber-600" />
+              <span>בית הסיפורים: {storyCompleted}/8</span>
+            </div>
+            <div className="flex items-center gap-1.5 rounded-2xl bg-sky-100 px-3.5 py-2 text-xs font-bold text-sky-900">
+              <Sparkles className="h-3.5 w-3.5 text-sky-600" />
+              <span>חנות המספרים: {mathCompleted}/9</span>
+            </div>
           </div>
         </div>
       </header>
@@ -71,17 +84,26 @@ export const VillageScreen: React.FC<VillageScreenProps> = ({
                 שלום {profile.childName}! לאן נטייל היום בכפר?
               </h2>
               <p className="mt-1 text-sm text-stone-600">
-                אורי השועל מחכה לך בבית הסיפורים. לחץ על הבית הצבעוני כדי להתחיל!
+                אורי השועל מחכה בבית הסיפורים, ודובי הסוחר מחכה בחנות המספרים!
               </p>
             </div>
           </div>
-          <button
-            type="button"
-            onClick={onEnterStoryHouse}
-            className="min-h-13 shrink-0 rounded-2xl bg-amber-500 px-6 py-3 text-base font-extrabold text-white shadow-md transition hover:bg-amber-600"
-          >
-            כניסה לבית הסיפורים
-          </button>
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={onEnterStoryHouse}
+              className="min-h-12 shrink-0 rounded-2xl bg-amber-500 px-5 py-2.5 text-sm font-extrabold text-white shadow-md transition hover:bg-amber-600"
+            >
+              בית הסיפורים
+            </button>
+            <button
+              type="button"
+              onClick={onEnterMathShop}
+              className="min-h-12 shrink-0 rounded-2xl bg-sky-600 px-5 py-2.5 text-sm font-extrabold text-white shadow-md transition hover:bg-sky-700"
+            >
+              חנות המספרים
+            </button>
+          </div>
         </div>
 
         {/* 9 Village Buildings Grid */}

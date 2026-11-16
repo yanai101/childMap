@@ -1,6 +1,6 @@
 export type TaskStatus = 'לא התחיל' | 'בתהליך' | 'הושלם' | 'דולג';
 
-export type TaskId =
+export type StoryTaskId =
   | 'naming'
   | 'sequencing_a'
   | 'sequencing_b'
@@ -9,6 +9,19 @@ export type TaskId =
   | 'verbal_riddles'
   | 'verbal_vocabulary'
   | 'picture_description';
+
+export type MathTaskId =
+  | 'math_oral_counting'
+  | 'math_counting_objects'
+  | 'math_qty_to_numeral'
+  | 'math_qty_to_qty'
+  | 'math_more_less'
+  | 'math_numeral_recognition'
+  | 'math_numeral_naming'
+  | 'math_addition'
+  | 'math_patterns';
+
+export type TaskId = StoryTaskId | MathTaskId;
 
 export type NamingEvaluation =
   | 'שיום עצמאי ונכון'
@@ -54,8 +67,12 @@ export interface ItemResponse {
   selectedOrder?: string[];
   /** Used in sequencing tasks: whether selectedOrder matches expectedOrder */
   isOrderCorrect?: boolean;
+  /** Objective correctness where measurable (e.g. matching, recognition, addition) */
+  isCorrect?: boolean;
   /** Task-specific performance level label or 'לא נבדק' */
   performanceLevel?: string;
+  /** Structured activity-specific data (e.g. math strategy, stage, pattern type, one-to-one) */
+  metadata?: Record<string, unknown>;
   notes: string;
   recordingId?: string;
   updatedAt: number;
@@ -69,6 +86,8 @@ export interface TeacherAssessment {
   criteriaRatings: Record<string, string>;
   transcription: string;
   notes: string;
+  /** Structured task-level data (e.g. oral counting highest number, errors, skipped numbers) */
+  metadata?: Record<string, unknown>;
   recordingId?: string;
   updatedAt: number;
 }
