@@ -37,8 +37,7 @@ describe('Mathematics Shop — Content, Persistence & PDF Report', () => {
 
     const patternTypes = new Set(PATTERN_ITEMS.map((p) => p.patternType));
     expect(patternTypes).toEqual(new Set(['AB', 'AAB', 'ABC']));
-    // Verify missing elements inside patterns as well as at the end
-    expect(PATTERN_ITEMS.some((p) => p.sequence.indexOf(null) < p.sequence.length - 1)).toBe(true);
+    expect(PATTERN_ITEMS.every((p) => p.givenPrefix.length >= 2 && p.expectedContinuation.length >= 3)).toBe(true);
   });
 
   it('initializes both Story House (8) and Math Shop (9) tasks and preserves Story House data', async () => {

@@ -327,15 +327,16 @@ export const ADDITION_STRATEGIES = [
   'לא נצפה',
 ] as const;
 
-// Activity 9: Patterns (AB, AAB, ABC) — multiple items per type, including missing inside!
+// Activity 9: Patterns (AB, AAB, ABC) — first stage given, child completes the rest
 export type PatternToken = 'red_apple' | 'blue_berry' | 'yellow_star' | 'green_pear';
 
 export interface PatternItem {
   id: string;
   patternType: 'AB' | 'AAB' | 'ABC';
-  /** Sequence where null marks the missing slot (can be in the middle or at the end) */
-  sequence: (PatternToken | null)[];
-  expectedToken: PatternToken;
+  /** The initial model/stage shown to the child */
+  givenPrefix: PatternToken[];
+  /** The remaining slots the child needs to complete */
+  expectedContinuation: PatternToken[];
   choices: PatternToken[];
 }
 
@@ -344,45 +345,45 @@ export const PATTERN_ITEMS: PatternItem[] = [
   {
     id: 'pat-ab-1',
     patternType: 'AB',
-    sequence: ['red_apple', 'blue_berry', 'red_apple', 'blue_berry', 'red_apple', null],
-    expectedToken: 'blue_berry',
-    choices: ['blue_berry', 'red_apple', 'yellow_star'],
+    givenPrefix: ['red_apple', 'blue_berry', 'red_apple', 'blue_berry'],
+    expectedContinuation: ['red_apple', 'blue_berry', 'red_apple', 'blue_berry'],
+    choices: ['red_apple', 'blue_berry', 'yellow_star'],
   },
   {
     id: 'pat-ab-2',
     patternType: 'AB',
-    sequence: ['red_apple', 'yellow_star', null, 'yellow_star', 'red_apple', 'yellow_star'],
-    expectedToken: 'red_apple',
+    givenPrefix: ['red_apple', 'yellow_star'],
+    expectedContinuation: ['red_apple', 'yellow_star', 'red_apple', 'yellow_star'],
     choices: ['yellow_star', 'red_apple', 'green_pear'],
   },
   // AAB
   {
     id: 'pat-aab-1',
     patternType: 'AAB',
-    sequence: ['red_apple', 'red_apple', 'blue_berry', 'red_apple', 'red_apple', null],
-    expectedToken: 'blue_berry',
+    givenPrefix: ['red_apple', 'red_apple', 'blue_berry'],
+    expectedContinuation: ['red_apple', 'red_apple', 'blue_berry'],
     choices: ['red_apple', 'blue_berry', 'yellow_star'],
   },
   {
     id: 'pat-aab-2',
     patternType: 'AAB',
-    sequence: ['yellow_star', 'yellow_star', 'green_pear', 'yellow_star', null, 'green_pear'],
-    expectedToken: 'yellow_star',
+    givenPrefix: ['yellow_star', 'yellow_star', 'green_pear'],
+    expectedContinuation: ['yellow_star', 'yellow_star', 'green_pear'],
     choices: ['green_pear', 'yellow_star', 'blue_berry'],
   },
   // ABC
   {
     id: 'pat-abc-1',
     patternType: 'ABC',
-    sequence: ['red_apple', 'blue_berry', 'yellow_star', 'red_apple', 'blue_berry', null],
-    expectedToken: 'yellow_star',
-    choices: ['yellow_star', 'red_apple', 'blue_berry'],
+    givenPrefix: ['red_apple', 'blue_berry', 'yellow_star'],
+    expectedContinuation: ['red_apple', 'blue_berry', 'yellow_star'],
+    choices: ['red_apple', 'blue_berry', 'yellow_star'],
   },
   {
     id: 'pat-abc-2',
     patternType: 'ABC',
-    sequence: ['red_apple', 'blue_berry', null, 'red_apple', 'blue_berry', 'yellow_star'],
-    expectedToken: 'yellow_star',
-    choices: ['blue_berry', 'yellow_star', 'red_apple'],
+    givenPrefix: ['red_apple', 'blue_berry', 'green_pear'],
+    expectedContinuation: ['red_apple', 'blue_berry', 'green_pear'],
+    choices: ['blue_berry', 'green_pear', 'red_apple'],
   },
 ];
