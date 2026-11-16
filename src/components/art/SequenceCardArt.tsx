@@ -6,10 +6,27 @@ interface SequenceCardArtProps {
   className?: string;
 }
 
+const SEQUENCE_IMAGE_MAP: Partial<Record<SequenceCard['illustrationKey'], string>> = {
+  'seed-plant': '/images/seq_seed_plant.jpg',
+  'seed-bloom': '/images/seq_seed_bloom.jpg',
+};
+
 export const SequenceCardArt: React.FC<SequenceCardArtProps> = ({
   illustrationKey,
   className = 'w-full h-44',
 }) => {
+  const imageSrc = SEQUENCE_IMAGE_MAP[illustrationKey];
+  if (imageSrc) {
+    return (
+      <img
+        src={imageSrc}
+        alt="תמונת רצף סיפור"
+        className={`${className} rounded-2xl object-cover`}
+        draggable={false}
+      />
+    );
+  }
+
   return (
     <svg
       viewBox="0 0 220 180"
