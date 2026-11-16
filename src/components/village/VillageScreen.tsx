@@ -84,25 +84,9 @@ export const VillageScreen: React.FC<VillageScreenProps> = ({
                 שלום {profile.childName}! לאן נטייל היום בכפר?
               </h2>
               <p className="mt-1 text-sm text-stone-600">
-                אורי השועל מחכה בבית הסיפורים, ודובי הסוחר מחכה בחנות המספרים!
+                אורי השועל מחכה בבית הסיפורים, ודובי הסוחר מחכה בחנות המספרים! לחצו על הבית כדי להיכנס.
               </p>
             </div>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <button
-              type="button"
-              onClick={onEnterStoryHouse}
-              className="min-h-12 shrink-0 rounded-2xl bg-amber-500 px-5 py-2.5 text-sm font-extrabold text-white shadow-md transition hover:bg-amber-600"
-            >
-              בית הסיפורים
-            </button>
-            <button
-              type="button"
-              onClick={onEnterMathShop}
-              className="min-h-12 shrink-0 rounded-2xl bg-sky-600 px-5 py-2.5 text-sm font-extrabold text-white shadow-md transition hover:bg-sky-700"
-            >
-              חנות המספרים
-            </button>
           </div>
         </div>
 
@@ -110,6 +94,7 @@ export const VillageScreen: React.FC<VillageScreenProps> = ({
         <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {VILLAGE_BUILDINGS.map((building) => {
             const isAvailable = building.available;
+            const isMath = building.id === 'numbers-shop';
             return (
               <button
                 key={building.id}
@@ -118,7 +103,9 @@ export const VillageScreen: React.FC<VillageScreenProps> = ({
                 onClick={() => handleSelectBuilding(building)}
                 className={`group relative flex flex-col items-center rounded-3xl border-3 p-5 text-center transition ${
                   isAvailable
-                    ? 'cursor-pointer border-amber-400 bg-white shadow-xl hover:-translate-y-1 hover:shadow-2xl active:scale-[0.99]'
+                    ? isMath
+                      ? 'cursor-pointer border-sky-400 bg-white shadow-xl hover:-translate-y-1 hover:shadow-2xl active:scale-[0.99]'
+                      : 'cursor-pointer border-amber-400 bg-white shadow-xl hover:-translate-y-1 hover:shadow-2xl active:scale-[0.99]'
                     : 'cursor-not-allowed border-stone-200 bg-white/70 opacity-85'
                 }`}
               >
@@ -139,13 +126,25 @@ export const VillageScreen: React.FC<VillageScreenProps> = ({
                 </div>
 
                 <h3 className="mt-2 text-xl font-black text-stone-800">{building.name}</h3>
-                <span className="mt-0.5 text-xs font-bold text-amber-700">{building.domain}</span>
+                <span
+                  className={`mt-0.5 text-xs font-bold ${
+                    isMath ? 'text-sky-700' : 'text-amber-700'
+                  }`}
+                >
+                  {building.domain}
+                </span>
                 <p className="mt-2 text-xs leading-relaxed text-stone-600">
                   {building.description}
                 </p>
 
                 {isAvailable && (
-                  <span className="mt-4 inline-flex items-center gap-1 rounded-2xl bg-amber-100 px-4 py-2 text-sm font-extrabold text-amber-900 group-hover:bg-amber-200">
+                  <span
+                    className={`mt-4 inline-flex items-center gap-1 rounded-2xl px-4 py-2 text-sm font-extrabold ${
+                      isMath
+                        ? 'bg-sky-100 text-sky-900 group-hover:bg-sky-200'
+                        : 'bg-amber-100 text-amber-900 group-hover:bg-amber-200'
+                    }`}
+                  >
                     בוא נשחק עם {building.characterName}!
                   </span>
                 )}
