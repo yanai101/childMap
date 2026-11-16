@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+@layer base {
+  html {
+    direction: rtl;
+    font-family: 'Rubik', 'Heebo', 'Noto Sans Hebrew', 'Arial Hebrew', 'Segoe UI', Tahoma, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    background-color: #fffbeb;
+    color: #292524;
+    overflow-x: hidden;
+  }
+
+  button,
+  [role="button"] {
+    touch-action: manipulation;
+  }
+}
+
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.95) translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-float-slow {
+  animation: floatSlow 3.6s ease-in-out infinite;
+}
+
+.animate-pop-in {
+  animation: popIn 0.25s ease-out forwards;
+}
+
+/* Prevent accidental text selection while dragging story cards on tablets */
+.touch-drag-card {
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
