@@ -30,6 +30,12 @@ export const MathActivity9Patterns: React.FC<MathActivity9PatternsProps> = ({
   const [index, setIndex] = useState(0);
   const [responses, setResponses] = useState<Record<string, ItemResponse>>({});
   const [activeSlot, setActiveSlot] = useState(0);
+  const [dragState, setDragState] = useState<{
+    token: PatternToken;
+    x: number;
+    y: number;
+  } | null>(null);
+  const [hoveredSlot, setHoveredSlot] = useState<number | null>(null);
 
   const item = PATTERN_ITEMS[index];
   const resp = responses[item.id];
@@ -94,17 +100,76 @@ export const MathActivity9Patterns: React.FC<MathActivity9PatternsProps> = ({
     }
   };
 
-  const handleSelectToken = (token: PatternToken) => {
+  const placeTokenInSlot = (token: PatternToken, slotIdx: number) => {
+    if (slotIdx < 0 || slotIdx >= filledSlots.length) return;
     const nextSlots = [...filledSlots];
-    const targetIdx =
-      activeSlot < nextSlots.length ? activeSlot : nextSlots.findIndex((s) => s === null);
-    if (targetIdx < 0) return;
-
-    nextSlots[targetIdx] = token;
-    const nextEmpty = nextSlots.findIndex((s, i) => i > targetIdx && s === null);
+    nextSlots[slotIdx] = token;
+    const nextEmpty = nextSlots.findIndex((s, i) => i > slotIdx && s === null);
     const anyEmpty = nextEmpty >= 0 ? nextEmpty : nextSlots.findIndex((s) => s === null);
-    setActiveSlot(anyEmpty >= 0 ? anyEmpty : Math.min(targetIdx + 1, nextSlots.length - 1));
+    setActiveSlot(anyEmpty >= 0 ? anyEmpty : Math.min(slotIdx + 1, nextSlots.length - 1));
     void persistSlots(nextSlots);
+  };
+
+  const handleSelectToken = (token: PatternToken) => {
+    const targetIdx =
+      activeSlot < filledSlots.length ? activeSlot : filledSlots.findIndex((s) => s === null);
+    if (targetIdx < 0) return;
+    placeTokenInSlot(token, targetIdx);
+  };
+
+  const findSlotUnderPointer = (x: number, y: number): number | null => {
+    const elements = document.elementsFromPoint(x, y);
+    for (const el of elements) {
+      const attr = el.getAttribute('data-pattern-slot');
+      if (attr !== null) {
+        const parsed = Number(attr);
+        if (!Number.isNaN(parsed)) return parsed;
+      }
+    }
+    return null;
+  };
+
+  const handleChoicePointerDown = (
+    e: React.PointerEvent<HTMLButtonElement>,
+    token: PatternToken,
+  ) => {
+    e.preventDefault();
+    const startX = e.clientX;
+    const startY = e.clientY;
+    let isDragging = false;
+
+    const onMove = (moveEvent: PointerEvent) => {
+      const dx = moveEvent.clientX - startX;
+      const dy = moveEvent.clientY - startY;
+      if (!isDragging && Math.hypot(dx, dy) > 6) {
+        isDragging = true;
+      }
+      if (isDragging) {
+        setDragState({ token, x: moveEvent.clientX, y: moveEvent.clientY });
+        setHoveredSlot(findSlotUnderPointer(moveEvent.clientX, moveEvent.clientY));
+      }
+    };
+
+    const onUp = (upEvent: PointerEvent) => {
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+      window.removeEventListener('pointercancel', onUp);
+
+      if (isDragging) {
+        const dropSlot = findSlotUnderPointer(upEvent.clientX, upEvent.clientY);
+        if (dropSlot !== null) {
+          placeTokenInSlot(token, dropSlot);
+        }
+        setDragState(null);
+        setHoveredSlot(null);
+      } else {
+        handleSelectToken(token);
+      }
+    };
+
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+    window.addEventListener('pointercancel', onUp);
   };
 
   const handleSlotClick = (slotIdx: number) => {
@@ -152,6 +217,15 @@ export const MathActivity9Patterns: React.FC<MathActivity9PatternsProps> = ({
 
   return (
     <div className="mx-auto max-w-4xl space-y-6">
+      {dragState && (
+        <div
+          style={{ left: dragState.x - 32, top: dragState.y - 32 }}
+          className="pointer-events-none fixed z-50 flex h-16 w-16 items-center justify-center rounded-2xl border-2 border-sky-500 bg-white/95 shadow-2xl"
+        >
+          <PatternTokenIcon token={dragState.token} className="h-12 w-12" />
+        </div>
+      )}
+
       {/* Child-facing pattern stage */}
       <div className="rounded-[2rem] border-4 border-sky-200 bg-white p-6 shadow-lg sm:p-8">
         <div className="flex flex-wrap items-center justify-between gap-2">
@@ -190,9 +264,12 @@ export const MathActivity9Patterns: React.FC<MathActivity9PatternsProps> = ({
         <h2 className="mt-4 text-center text-2xl font-black text-stone-800 sm:text-3xl">
           הסתכל על ההתחלה של הדגם והשלם את ההמשך!
         </h2>
+        <p className="mt-1 text-center text-xs font-semibold text-stone-500">
+          אפשר לגרור את הפריטים אל המשבצות הריקות או ללחוץ עליהם.
+        </p>
 
         {/* Pattern strip: given initial stage + fillable continuation slots */}
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-2.5 rounded-3xl border-2 border-amber-200 bg-amber-50/50 p-5">
+        <div className="mt-5 flex flex-wrap items-center justify-center gap-2.5 rounded-3xl border-2 border-amber-200 bg-amber-50/50 p-5">
           {item.givenPrefix.map((token, idx) => (
             <div
               key={`prefix-${idx}`}
@@ -204,17 +281,21 @@ export const MathActivity9Patterns: React.FC<MathActivity9PatternsProps> = ({
 
           {filledSlots.map((token, slotIdx) => {
             const isActive = slotIdx === activeSlot;
+            const isHovered = slotIdx === hoveredSlot;
             return (
               <button
                 key={`slot-${slotIdx}`}
                 type="button"
+                data-pattern-slot={slotIdx}
                 onClick={() => handleSlotClick(slotIdx)}
                 className={`flex h-16 w-16 items-center justify-center rounded-2xl border-3 border-dashed transition sm:h-18 sm:w-18 ${
-                  isActive
-                    ? 'border-sky-600 bg-sky-50 ring-3 ring-sky-200'
-                    : token
-                      ? 'border-sky-400 bg-white shadow-xs'
-                      : 'border-sky-300 bg-white/80'
+                  isHovered
+                    ? 'scale-105 border-emerald-500 bg-emerald-50 ring-3 ring-emerald-200'
+                    : isActive
+                      ? 'border-sky-600 bg-sky-50 ring-3 ring-sky-200'
+                      : token
+                        ? 'border-sky-400 bg-white shadow-xs'
+                        : 'border-sky-300 bg-white/80'
                 }`}
               >
                 {token ? (
@@ -227,16 +308,16 @@ export const MathActivity9Patterns: React.FC<MathActivity9PatternsProps> = ({
           })}
         </div>
 
-        {/* Choices */}
+        {/* Choices (draggable + clickable) */}
         <div className="mt-6 flex flex-wrap items-center justify-center gap-4">
           {item.choices.map((choice) => (
             <button
               key={choice}
               type="button"
-              onClick={() => void handleSelectToken(choice)}
-              className="flex h-24 w-28 items-center justify-center rounded-3xl border-3 border-stone-200 bg-stone-50 transition hover:border-sky-400 hover:bg-sky-50 active:scale-95"
+              onPointerDown={(e) => handleChoicePointerDown(e, choice)}
+              className="flex h-24 w-28 cursor-grab touch-none select-none items-center justify-center rounded-3xl border-3 border-stone-200 bg-stone-50 transition hover:border-sky-400 hover:bg-sky-50 active:scale-95 active:cursor-grabbing"
             >
-              <PatternTokenIcon token={choice} className="h-14 w-14" />
+              <PatternTokenIcon token={choice} className="pointer-events-none h-14 w-14" />
             </button>
           ))}
         </div>
