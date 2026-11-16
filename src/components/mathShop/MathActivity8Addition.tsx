@@ -21,6 +21,7 @@ export const MathActivity8Addition: React.FC<MathActivity8AdditionProps> = ({
   onFinishActivity,
 }) => {
   const [index, setIndex] = useState(0);
+  const [showManipulatives, setShowManipulatives] = useState(false);
   const [selectedManipulatives, setSelectedManipulatives] = useState<number[]>([]);
   const [responses, setResponses] = useState<Record<string, ItemResponse>>({});
 
@@ -31,6 +32,7 @@ export const MathActivity8Addition: React.FC<MathActivity8AdditionProps> = ({
 
   useEffect(() => {
     setSelectedManipulatives([]);
+    setShowManipulatives(false);
   }, [index]);
 
   useEffect(() => {
@@ -98,7 +100,7 @@ export const MathActivity8Addition: React.FC<MathActivity8AdditionProps> = ({
     );
   };
 
-  const totalManipulatives = problem.initialCount + problem.addedCount;
+  const MANIPULATIVE_POOL_SIZE = 10;
 
   return (
     <div className="mx-auto max-w-4xl space-y-6">
@@ -108,54 +110,64 @@ export const MathActivity8Addition: React.FC<MathActivity8AdditionProps> = ({
           <span className="rounded-full bg-sky-100 px-4 py-1 text-sm font-extrabold text-sky-900">
             סיפור חיבור {problem.problemNumber} מתוך {ADDITION_PROBLEMS.length}
           </span>
-          <button
-            type="button"
-            onClick={() => setSelectedManipulatives([])}
-            className="flex items-center gap-1 rounded-xl border border-stone-200 bg-stone-50 px-3 py-1.5 text-xs font-semibold text-stone-600 hover:bg-stone-100"
-          >
-            <RotateCcw className="h-3.5 w-3.5" />
-            איפוס הדגמה
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setShowManipulatives((v) => !v)}
+              className="rounded-xl border border-amber-300 bg-amber-50 px-3 py-1.5 text-xs font-bold text-amber-900 hover:bg-amber-100"
+            >
+              {showManipulatives ? 'הסתר אביזרי המחשה' : 'פתח אביזרי המחשה (רשות)'}
+            </button>
+            {showManipulatives && (
+              <button
+                type="button"
+                onClick={() => setSelectedManipulatives([])}
+                className="flex items-center gap-1 rounded-xl border border-stone-200 bg-stone-50 px-3 py-1.5 text-xs font-semibold text-stone-600 hover:bg-stone-100"
+              >
+                <RotateCcw className="h-3.5 w-3.5" />
+                איפוס
+              </button>
+            )}
+          </div>
         </div>
 
-        <div className="mt-5 flex flex-col items-center gap-4 sm:flex-row sm:text-right">
-          <BearShopkeeper className="h-24 w-24 shrink-0" />
+        <div className="mt-6 flex flex-col items-center gap-4 sm:flex-row sm:text-right">
+          <BearShopkeeper className="h-28 w-28 shrink-0" />
           <p className="text-xl font-black leading-relaxed text-stone-800 sm:text-2xl">
             {problem.promptHe}
           </p>
         </div>
 
-        {/* Optional manipulable objects (never displays numeric total!) */}
-        <div className="mt-6 rounded-3xl border-2 border-amber-200 bg-amber-50/40 p-5">
-          <p className="mb-3 text-center text-xs font-semibold text-stone-500">
-            אפשר ללחוץ על החפצים כדי להדגים ולהזיז אותם לסל החישוב:
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-4">
-            {Array.from({ length: totalManipulatives }, (_, idx) => {
-              const isInSecondGroup = idx >= problem.initialCount;
-              const isPicked = selectedManipulatives.includes(idx);
-              return (
-                <button
-                  key={idx}
-                  type="button"
-                  onClick={() => toggleManipulative(idx)}
-                  className={`rounded-2xl border-2 p-2.5 transition active:scale-95 ${
-                    isPicked
-                      ? 'border-sky-500 bg-sky-100 ring-2 ring-sky-300 -translate-y-1'
-                      : isInSecondGroup
-                        ? 'border-dashed border-amber-400 bg-white hover:bg-amber-50'
+        {/* Optional neutral 10-object tray (hidden by default so illustration never gives away the answer) */}
+        {showManipulatives && (
+          <div className="mt-6 rounded-3xl border-2 border-amber-200 bg-amber-50/40 p-5">
+            <p className="mb-3 text-center text-xs font-semibold text-stone-500">
+              אפשר לבחור חפצים מהסל כדי להיעזר בחישוב:
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              {Array.from({ length: MANIPULATIVE_POOL_SIZE }, (_, idx) => {
+                const isPicked = selectedManipulatives.includes(idx);
+                return (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => toggleManipulative(idx)}
+                    className={`rounded-2xl border-2 p-2 transition active:scale-95 ${
+                      isPicked
+                        ? 'border-sky-500 bg-sky-100 ring-2 ring-sky-300 -translate-y-1'
                         : 'border-amber-300 bg-white hover:bg-amber-50'
-                  }`}
-                >
-                  <ShopObjectIcon
-                    type={problem.objectType}
-                    className="h-12 w-12 sm:h-14 sm:w-14"
-                  />
-                </button>
-              );
-            })}
+                    }`}
+                  >
+                    <ShopObjectIcon
+                      type={problem.objectType}
+                      className="h-11 w-11 sm:h-12 sm:w-12"
+                    />
+                  </button>
+                );
+              })}
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="mt-8 flex items-center justify-between gap-4">
           <button

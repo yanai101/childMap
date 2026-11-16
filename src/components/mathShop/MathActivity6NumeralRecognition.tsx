@@ -14,6 +14,19 @@ interface MathActivity6NumeralRecognitionProps {
 
 const INDEPENDENCE_OPTIONS = ['עצמאי', 'לאחר רמז/חשיבה', 'בתיווך', 'לא נבדק'];
 
+const NUMBER_WORDS_HE: Record<number, string> = {
+  1: 'אחד',
+  2: 'שתיים',
+  3: 'שלוש',
+  4: 'ארבע',
+  5: 'חמש',
+  6: 'שש',
+  7: 'שבע',
+  8: 'שמונה',
+  9: 'תשע',
+  10: 'עשר',
+};
+
 export const MathActivity6NumeralRecognition: React.FC<
   MathActivity6NumeralRecognitionProps
 > = ({ profileId, onEncourage, onOpenTeacherDrawer, onFinishActivity }) => {
@@ -111,8 +124,11 @@ export const MathActivity6NumeralRecognition: React.FC<
         </div>
 
         <h2 className="mt-6 text-center text-3xl font-black text-stone-800 sm:text-4xl">
-          תראה לי איפה המספר {item.targetNumeral}.
+          תראה לי איפה המספר {NUMBER_WORDS_HE[item.targetNumeral] ?? item.targetNumeral}.
         </h2>
+        <p className="mt-2 text-center text-sm font-medium text-stone-500">
+          הגננת מקריאה בקול את שם המספר, והילד/ה בוחר/ת את הכרטיסייה המתאימה.
+        </p>
 
         <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
           {item.choices.map((num) => {
